@@ -1,0 +1,185 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>connector - htt2 - connector</title>
+          <meta name="description" content="connector - htt2 - connector" />
+          <meta name="keywords" content="connector htt2 connector" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../lib/template.js"></script>
+      <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../index.html';
+            var hash = 'connector.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../lib/package_big.png" />
+        
+        <h1>connector</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">connector</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="connector.HbaseConnector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HbaseConnectorextendsAnyRef"></a>
+      <a id="HbaseConnector:HbaseConnector"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="HbaseConnector.html"><span class="name">HbaseConnector</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">封装了与hbase连接的非静态方法</p>
+    </li><li name="connector.RedisConnector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RedisConnectorextendsAnyRef"></a>
+      <a id="RedisConnector:RedisConnector"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RedisConnector.html"><span class="name">RedisConnector</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">封装了与redis连接的非静态方法
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="connector.HbaseConnector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HbaseConnector"></a>
+      <a id="HbaseConnector:HbaseConnector"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="HbaseConnector$.html"><span class="name">HbaseConnector</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">封装了与hbase连接的非静态方法
+</p>
+    </li><li name="connector.KafkaConsFactory" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KafkaConsFactory"></a>
+      <a id="KafkaConsFactory:KafkaConsFactory"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="KafkaConsFactory$.html"><span class="name">KafkaConsFactory</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">调用该类的run()方法 可以启动一个spark streaming的kafka消费者<br>
+  可以对获得到的RDD进行传入的操作
+</p>
+    </li><li name="connector.KafkaProdFactory" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="KafkaProdFactory"></a>
+      <a id="KafkaProdFactory:KafkaProdFactory"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="KafkaProdFactory$.html"><span class="name">KafkaProdFactory</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">类中的静态变量producer 为继承了KafkaProducer[String,String]的匿名内部类的对象<br>
+  该对象重载了send()方法 用于向kafka生产消息
+</p>
+    </li><li name="connector.RedisConnector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RedisConnector"></a>
+      <a id="RedisConnector:RedisConnector"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="RedisConnector$.html"><span class="name">RedisConnector</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">封装了与redis连接的非静态方法
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

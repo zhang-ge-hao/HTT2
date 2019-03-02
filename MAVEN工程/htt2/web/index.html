@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="PIC/favicon.ico" type="image/x-icon" />
+    <title>首页-HTT搜索引擎，你能看到的最简陋搜索引擎。</title>
+    <script type="application/javascript" src="JS/jquery-3.3.1.min.js"></script>
+    <style>
+        em{
+            font-style: normal;
+            color: red;
+        }
+        .top-panel{
+            padding-left: 121px;
+            padding-bottom: 20px;
+            padding-top: 10px;
+        }
+        .search-panel{
+            width: 700px;
+            height: 27px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid grey;
+        }
+        .search-button{
+            width: 100px;
+            height: 27px;
+            display: inline-block;
+            position: absolute;
+            left: 600px;
+            border-width: 0 0 0 1px;
+            border-color: grey;
+            border-style: solid;
+            cursor: pointer;
+        }
+        .search-line{
+            width: 600px;
+            height: 22px;
+            font-size: 16px;
+            display: inline-block;
+            border: none;
+            padding-left: 3px;
+            padding-top: 2px;
+        }
+        .middle-panel{
+            padding-left: 121px;
+            position: relative;
+        }
+        .result-count{
+            margin: 0;
+            color: grey;
+            font-size: 13px;
+        }
+        .result-panel{
+            width: 700px;
+            position: relative;
+        }
+        .result-item{
+            width: 100%;
+            padding: 5px 0;
+        }
+        .result-a-img{
+            width: 121px;
+            height: 75px;
+            display: block;
+        }
+        .result-img{
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            border-radius: 2px;
+        }
+        .result-down{
+            width: 100%;
+            position: relative;
+        }
+        .result-sub{
+            width: 569px;
+            position: absolute;
+            left: 131px;
+            top : 0;
+        }
+        .result-sub-no-img{
+            width: 700px;
+        }
+        .result-up{
+            padding-bottom: 3px;
+        }
+        .result-tit{
+            font-size: 16px;
+        }
+        .result-sum,.result-url{
+            font-size: 14px;
+        }
+        .result-sum{
+            padding: 0;
+            margin: 0;
+        }
+        .result-url{
+            color: green;
+        }
+        .bottom-panel{
+            padding-left: 121px;
+            padding-top: 30px;
+            padding-bottom: 50px;
+        }
+        .page-index-panel{
+            height: 40px;
+            width: 700px;
+        }
+        .page-index{
+            height: 34px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+            margin-right: 5px;
+        }
+        .num-page-index{
+            width: 34px;
+        }
+        .neb-page-index{
+            width: 80px;
+        }
+        .abled-page-index{
+            background: none;
+            border: 1px solid #e1e2e3;
+        }
+        .abled-page-index:hover,.abled-page-index:focus{
+            background: #d2ecff;
+            border: 1px solid blue;
+        }
+        .disabled-page-index{
+            background: #d5d5d5;
+            border: 1px solid #e1e2e3;
+            color: #b7b7b7;
+        }
+        .choosen-page-index{
+            background: none;
+            border: none;
+            font-weight: bold;
+        }
+        .input-set-panel{
+            font-size: 12px;
+            color: grey;
+            padding-top: 3px;
+            text-align: right;
+            width: 700px;
+        }
+        .item-per-page-select{
+            width: 20px;
+            color: grey;
+            font-size: 12px;
+            -webkit-appearance: none;
+            border: none;
+        }
+        .loading-panel{
+            width: 100%;
+            height: 100%;
+            background: white;
+            opacity: 0.8;
+            filter:alpha(opacity=80);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .middle-right-panel{
+            position: absolute;
+            width: 300px;
+            height: 200px;
+            padding-bottom: 50px;
+            left: 850px;
+            top : 20px;
+            padding-left: 17px;
+            border-left:2px solid #e1e1e1;
+            display: none;
+        }
+        .neighbor-panel{
+            width: 100%;
+            top: 20px;
+            left: 0;
+        }
+        .neighbor-tit{
+            width: 100%;
+            height: 20px;
+            margin-bottom: 10px;
+            font-family: simsun;
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+        .neighbor-item{
+            height: 130px;
+            width: 90px;
+            float: left;
+        }
+        .neighbor-item-img{
+            height: 75px;
+            width: 75px;
+            background-image: url("PIC/default.png");
+            background-size: contain;
+            background-position: center;
+            background-repeat:no-repeat;
+            text-align: center;
+            box-shadow: 2px 2px 4px lightgray;
+            cursor: pointer;
+        }
+        .neighbor-item-tit{
+            width: 75px;
+            text-align: center;
+            margin-top: 4px;
+            font-size: 14px;
+        }
+    </style>
+    <script type="text/javascript">
+        var titMaxLen = 50;
+        var sumMaxLen = 80;
+        var urlMaxLen = 70;
+        var sumMaxLenNoImg = 120;
+        var urlMaxLenNoImg = 120;
+        var itemPerPage = 20;
+        var indexButtonCon = 10;
+
+        function search(data,func){
+            showLoadingPanel();
+            jQuery.ajax({
+                type: 'GET',
+                dataType: 'text',
+                url: "s",
+                data:data,
+                async:false,
+                success:func
+            });
+        }
+        function showLoadingPanel() {
+            $(".result-count").html("");
+            var rp = $(".result-panel");
+            $(".loading-panel").remove();
+            $(rp).append($("<div class='loading-panel'></div>"));
+        }
+
+        function dealWithRes(resData) {
+            var rd = JSON.parse(resData);
+            var data = rd.data;
+            var neb = rd.neb;
+            var rp = $(".result-panel");
+            var np = $(".neighbor-panel")
+            $(rp).empty();
+            $(np).empty();
+            for(var i=0;i<data.length;i++)
+                $(rp).append(getResultItemPanel(data[i],rd.wds));
+            for(var i=0;i<neb.length;i++)
+                $(np).append(getNebItemPanel(neb[i]));
+            $(".middle-right-panel").show();
+            setResultCount(rd.count);
+            setIndexButton(rd.wd,rd.pg,rd.cp,rd.count);
+        }
+        function setIndexButton(wd,pg,cp,count) {
+            var pip = $(".page-index-panel");
+            $(pip).empty();
+            var totp = (count===0)?1:(parseInt(count/cp)+(count%cp===0?0:1));
+            var pgsta = Math.max(1,pg-parseInt(indexButtonCon/2)-1);
+            var pgend = Math.min(totp,pgsta+indexButtonCon-1);
+            var pButton,nButton;
+            if(pg > 1){
+                pButton = $("<button class='page-index neb-page-index abled-page-index'>" +
+                    "上一页</button>");
+                $(pButton).click(function () {
+                    search({wd: wd, cp: cp, pg: pg-1}, dealWithRes);
+                });
+            }else{
+                pButton = $("<button class='page-index neb-page-index disabled-page-index'>" +
+                    "上一页</button>");
+            }
+            $(pip).append(pButton);
+            for(var i=pgsta;i<pgsta+indexButtonCon;i++){
+                var iButton;
+                if(i === pg){
+                    iButton = $("<button class='page-index num-page-index choosen-page-index'>" +
+                        i + "</button>");
+
+                } else if(i <= pgend) {
+                    iButton = $("<button class='page-index num-page-index abled-page-index'>" +
+                        i + "</button>");
+                    $(iButton).attr({
+                        onclick:"search({wd: '"+wd+"', cp: "+cp+", pg: "+i+" }, dealWithRes)"
+                    });
+                }else{
+                    iButton = $("<button class='page-index num-page-index disabled-page-index'>" +
+                        i + "</button>");
+                }
+                $(pip).append(iButton);
+            }
+            if(pg < totp){
+                nButton = $("<button class='page-index neb-page-index abled-page-index'>" +
+                    "下一页</button>");
+                $(nButton).click(function () {
+                    search({wd: wd, cp: cp, pg: pg+1}, dealWithRes);
+                });
+            }else{
+                nButton = $("<button class='page-index neb-page-index disabled-page-index'>" +
+                    "下一页</button>");
+            }
+            $(pip).append(nButton)
+        }
+        function setResultCount(count) {
+            var rc = $(".result-count");
+            $(rc).html("为您找到相关结果约 <b>"+count.toLocaleString()+"</b> 个");
+        }
+        function dealWithLength(str,maxLen,wds) {
+            str = str.trim();
+            var exLen = (str.length > maxLen);
+            if(exLen)str = str.substr(0,maxLen);
+            for(var i=0;i<wds.length;i++){
+                var reg = new RegExp(wds[i],'gm');
+                str = str.replace(reg,"<em>"+wds[i]+"</em>");
+            }
+            if(exLen)str += "...";
+            return str;
+        }
+        function getNebItemPanel(wordMessage) {
+            var res = $("<div class='neighbor-item'></div>");
+            var img = $("<div class='neighbor-item-img'></div>");
+            var imga = $("<a href='#"+wordMessage.wd+"'></a>");
+            $(imga).click(function () {
+                $(".search-line").val(wordMessage.wd);
+                $(".search-button").click();
+            });
+            var imgUrl = "./is?wd="+wordMessage.wd;
+            $(img).css({"background-image":"url(\""+imgUrl+"\")"});
+            $(imga).append(img);
+            $(res).append(imga);
+            var titd = $("<div class='neighbor-item-tit'></div>");
+            var tita = $("<a href='#"+wordMessage.wd+"'>"+wordMessage.wd+"</a>");
+            $(tita).click(function () {
+                $(".search-line").val(wordMessage.wd);
+                $(".search-button").click();
+            });
+            $(titd).append(tita);
+            $(res).append(titd);
+            return res;
+        }
+
+        /**
+         *
+         * @param pageMessage
+         * @param wds
+         * @returns {p.fn.init|jQuery|HTMLElement}
+         */
+        function getResultItemPanel(pageMessage,wds){
+            var noImg = (pageMessage.img === "");
+
+            var tit = $("<p>"+pageMessage.tit+"</p>").text();
+            // 中新网我丢勒楼某 因为居然会有新闻网站的网页的title是html格式的 所以只能这样处理
+            var sum = pageMessage.sum;
+            var titDisp = dealWithLength(tit,titMaxLen,wds);
+            var sumDisp = dealWithLength(sum,noImg?sumMaxLenNoImg:sumMaxLen,wds);
+            var img = pageMessage.img;
+            var url = pageMessage.url;
+            var urlDisp = url;
+            if(url.length > (noImg?urlMaxLenNoImg:urlMaxLen))
+                urlDisp = url.substr(0,(noImg?urlMaxLenNoImg:urlMaxLen))+"...";
+            var titEle = $("<a class='result-tit'>"+titDisp+"</a>");
+            var urlEle = $("<a class='result-url'>"+urlDisp+"</a>");
+            $(titEle).attr({href:url, title:tit});
+            $(urlEle).attr({href:url, title:tit});
+
+            var sumEle = $("<p class='result-sum'>"+sumDisp+"</p>");
+
+            var imgEle = $("<div class='result-img'></div>");
+            $(imgEle).css({"background-image":"url("+img+")"});
+            var imgAEle = $("<a class='result-a-img'></a>");
+            $(imgAEle).append(imgEle);
+            $(imgAEle).attr({href:url, title:tit});
+
+            var subPanel = $("<div class='result-sub'></div>");
+            $(subPanel).append(sumEle);
+            $(subPanel).append(urlEle);
+
+            var subPanelNoImg = $("<div class='result-sub-no-img'></div>");
+            $(subPanelNoImg).append($(sumEle).clone());
+            $(subPanelNoImg).append($(urlEle).clone());
+
+            var downPanel = $("<div class='result-down'></div>");
+            if(pageMessage.img !== "") {
+                $(downPanel).append(imgAEle);
+                $(downPanel).append(subPanel);
+            }else $(downPanel).append(subPanelNoImg);
+
+            var upPanel = $("<div class='result-up'></div>");
+            $(upPanel).append(titEle);
+
+            var res = $("<div class='result-item'></div>");
+            $(res).append(upPanel);
+            $(res).append(downPanel);
+
+            return res;
+        }
+        $(document).ready(function(){
+            $(".search-button").click(function () {
+                var wd = $(this).prev().val().trim();
+                if(wd !== "") search({wd:wd,cp:itemPerPage},dealWithRes);
+            });
+            var ipps = $(".item-per-page-select");
+            $(ipps).val("20");
+            $(ipps).change(function () {
+                var index = this.selectedIndex;
+                var value = this.options[index].value;
+                itemPerPage = parseInt(value);
+            });
+            // dealWithRes(JSON.stringify(dataDemo)); // 测试代码
+            // showLoadingPanel(); // 测试代码
+        });
+    </script>
+</head>
+<body>
+<div class="top-panel">
+    <div class="search-panel">
+        <input class="search-line" type="text" title="搜索"/>
+        <button class="search-button">搜索</button>
+    </div>
+    <div class="input-set-panel">
+        <span>搜索结果显示</span>
+        <select class="item-per-page-select" title="条数">
+            <option value="10">10</option>
+            <option value="20" selected = "selected">20</option>
+            <option value="40">40</option>
+        </select>
+        <span>条每页</span>
+    </div>
+</div>
+<div class="middle-panel">
+    <div class="result-count-panel">
+        <p class="result-count"></p>
+    </div>
+    <div class="result-panel">
+    </div>
+
+    <div class="middle-right-panel">
+        <div class="neighbor-tit">
+            <span>相关搜索</span>
+        </div>
+        <div class="neighbor-panel">
+
+        </div>
+    </div>
+</div>
+<div class="bottom-panel">
+    <div class="page-index-panel"></div>
+</div>
+</body>
+</html>
